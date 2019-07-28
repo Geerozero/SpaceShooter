@@ -5,7 +5,7 @@ using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 public class GameController : MonoBehaviour
 {
-    public GameObject hazard;
+    public GameObject[] hazards;
     public Vector3 spawnValues;
     public int hazardCount;
     public float spawnWait;
@@ -15,8 +15,9 @@ public class GameController : MonoBehaviour
     public Text scoreText;
     public Text restartText;
     public Text gameOverText;
-    public bool restart;
-    public bool gameOver;
+    private bool restart;
+    private bool gameOver;
+    private bool win;
 
     private void Start() {
         
@@ -39,7 +40,7 @@ public class GameController : MonoBehaviour
 
         if(restart)
         {
-            if(Input.GetKey(KeyCode.R))
+            if(Input.GetKey(KeyCode.Y))
             {
                 SceneManager.LoadScene("MainScene");
             }
@@ -55,6 +56,7 @@ public class GameController : MonoBehaviour
         {
             for(int i = 0; i < hazardCount; i++)
             {
+                GameObject hazard = hazards[Random.Range(0, hazards.Length)];
                 float x = Random.Range(-6.0f, 6.0f);
                 Vector3 spawnPosition = new Vector3(x, spawnValues.y,spawnValues.z);
                 
@@ -69,7 +71,7 @@ public class GameController : MonoBehaviour
 
             if(gameOver)
             {
-                restartText.text = "Press R to restart.";
+                restartText.text = "Press Y to restart.";
                 restart = true;
                 break;
             }
@@ -84,12 +86,22 @@ public class GameController : MonoBehaviour
 
     void UpdateScore()
     {
-        scoreText.text = "Score: " + score;
+        scoreText.text = "Points: " + score;
+
+        if(score >= 100)
+        {
+            gameOverText.text = "You win! Game created by Christian Mendoza";
+            gameOver = true;
+            restart = true;
+;        }
     }
 
     public void GameOver()
     {
+        if(!win)
+        {
         gameOverText.text = "Game Over!";
+        }
         gameOver = true;
     }
 }

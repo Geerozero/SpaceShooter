@@ -9,7 +9,7 @@ public class DestroyByContact : MonoBehaviour
 
     public GameObject playerExplode;
     private GameController gameController;
-
+    public int scoreAdd;
 
     private void Start() 
     {
@@ -33,7 +33,7 @@ public class DestroyByContact : MonoBehaviour
     private void OnTriggerEnter(Collider other) 
     {
         
-        if(other.tag == "Boundary")
+        if(other.tag == "Boundary" || other.tag == "Enemy")
         {
             return;
         }
@@ -44,9 +44,12 @@ public class DestroyByContact : MonoBehaviour
             gameController.GameOver();
         }
 
+        if(explosion != null)
+        {
         Instantiate(explosion, transform.position, transform.rotation);
+        }
 
-        gameController.AddScore(1);
+        gameController.AddScore(scoreAdd);
 
 
         //destroys whatever other thing is touched
